@@ -1,13 +1,20 @@
 import http from "http";
+import express from "express";
 import { Server } from "socket.io";
 import { logger } from "./logger";
 import { socketListeners } from "./socketListeners";
 
-const server: http.Server = new http.Server();
+const app = express();
+const server = http.createServer(app);
 const io = new Server(server);
-const port: number = 8080;
 
-server.listen(port, () => {
+const port = 8080;
+
+app.get("/", (req, res) => {
+  res.send("Hello world");
+});
+
+server.listen(port, "0.0.0.0", () => {
   logger.info(`Listening on port ${port}`);
 });
 

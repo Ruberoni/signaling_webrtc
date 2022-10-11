@@ -1,20 +1,22 @@
 /**
  * List of messages to use with Socket
  */
-class SocketMessages {
-
-    public readonly message: string = 'message';
-    public readonly iceCandidate: string = 'ice-candidate';
-    public readonly offer: string = 'offer';
-    public readonly answer: string = 'answer';
-    public readonly startCall: string = 'start-call';
-    public readonly hangUp: string = 'hang-up';
-    public readonly createOrJoinRoom: string = 'create or join';
-    public readonly created: string = 'created';
-    public readonly joined: string = 'joined';
-    public readonly join: string = 'join';
-    public readonly ready: string = 'ready';
-    public readonly full: string = 'full';
-}
-
-export const socketMessages: SocketMessages = new SocketMessages();
+export const SOCKET_EVENT_TYPE = {
+  MESSAGE: "message",
+  CANDIDATE: "candidate",
+  OFFER: "offer",
+  ANSWER: "answer",
+  SEND_CALL_OFFER: "call_offer",
+  LEAVE: "leave",
+  CREATED: "created",
+  READY: "ready",
+  ERROR: "error",
+  CREATE_ROOM: "create-room",
+  JOINED_ROOM: "joined-room",
+  JOIN_ROOM: "join-room",
+  ROOM_FULL: "room-full",
+  ROOM_NOT_EXIST: "room-not-exist",
+  ROOM_ALREADY_EXIST: "room-already-exist",
+  LOGIN: "login",
+  REMOTE_OFF: "remoteOff",
+} as const;
