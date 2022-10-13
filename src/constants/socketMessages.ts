@@ -19,4 +19,5 @@ export const SOCKET_EVENT_TYPE = {
   ROOM_ALREADY_EXIST: "room-already-exist",
   LOGIN: "login",
   REMOTE_OFF: "remoteOff",
+  PING: "ping",
 } as const;
