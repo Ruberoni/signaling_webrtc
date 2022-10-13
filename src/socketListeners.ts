@@ -21,6 +21,11 @@ class SocketListeners {
     };
 
     logger.info("a user connected");
+    logger.info(
+      `Actual amount of connected sockets: ${JSON.stringify(
+        io.engine.clientsCount
+      )}`
+    );
 
     socket.on("disconnect", () => {
       logger.info("user disconnected");
@@ -35,17 +40,17 @@ class SocketListeners {
         return;
       }
 
-      const room_id: string | undefined = event.room;
-      const room = io.sockets.adapter.rooms.get(room_id);
-      if (room_id && room) {
-        logger.warn("Room doesnt exist. room_id:", room_id);
+      const roomCode: string | undefined = event.roomCode;
+      const room = io.sockets.adapter.rooms.get(roomCode);
+      if (roomCode && room) {
+        logger.warn("Room doesnt exist. room_id:", roomCode);
       }
 
       switch (event.type) {
         case SOCKET_EVENT_TYPE.LOGIN:
           logProcedure(SOCKET_EVENT_TYPE.LOGIN);
-          socket.join(room_id);
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.join(roomCode);
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.LOGIN,
           });
           break;
@@ -54,7 +59,7 @@ class SocketListeners {
          */
         case SOCKET_EVENT_TYPE.OFFER:
           logProcedure(SOCKET_EVENT_TYPE.OFFER, { offer: event.offer });
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.OFFER,
             offer: event.offer, // Remote description
           });
@@ -64,7 +69,7 @@ class SocketListeners {
          */
         case SOCKET_EVENT_TYPE.ANSWER:
           logProcedure(SOCKET_EVENT_TYPE.ANSWER);
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.ANSWER,
             answer: event.answer,
           });
@@ -75,7 +80,7 @@ class SocketListeners {
          */
         case SOCKET_EVENT_TYPE.CANDIDATE:
           logProcedure(SOCKET_EVENT_TYPE.CANDIDATE);
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.CANDIDATE,
             candidate: event.candidate,
           });
@@ -83,7 +88,7 @@ class SocketListeners {
 
         case SOCKET_EVENT_TYPE.LEAVE:
           logProcedure(SOCKET_EVENT_TYPE.LEAVE);
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.LEAVE,
           });
           socket.disconnect();
@@ -94,7 +99,7 @@ class SocketListeners {
          */
         case SOCKET_EVENT_TYPE.REMOTE_OFF: {
           logProcedure(SOCKET_EVENT_TYPE.REMOTE_OFF);
-          socket.broadcast.to(room_id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
+          socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.REMOTE_OFF,
             remoteOff: event.remoteOff,
           });
@@ -102,12 +107,12 @@ class SocketListeners {
         }
 
         case SOCKET_EVENT_TYPE.JOIN_ROOM:
-          logProcedure(SOCKET_EVENT_TYPE.JOIN_ROOM, { room_id });
+          logProcedure(SOCKET_EVENT_TYPE.JOIN_ROOM, { room_id: roomCode });
           if (!room) {
             logger.info("Room doesnt exits");
             socket.to(socket.id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
               type: SOCKET_EVENT_TYPE.ROOM_NOT_EXIST,
-              room: room_id,
+              room: roomCode,
             });
             return;
           }
@@ -116,15 +121,15 @@ class SocketListeners {
             logger.info("Room full");
             socket.to(socket.id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
               type: SOCKET_EVENT_TYPE.ROOM_FULL,
-              room: room_id,
+              room: roomCode,
             });
             return;
           }
 
-          socket.join(room_id);
+          socket.join(roomCode);
           socket.broadcast.emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.CREATED,
-            room: room_id,
+            room: roomCode,
           });
           break;
         case SOCKET_EVENT_TYPE.SEND_CALL_OFFER:
@@ -132,19 +137,19 @@ class SocketListeners {
           emitMessage();
           break;
         case SOCKET_EVENT_TYPE.CREATE_ROOM:
-          logProcedure(SOCKET_EVENT_TYPE.JOIN_ROOM, { room_id });
+          logProcedure(SOCKET_EVENT_TYPE.JOIN_ROOM, { room_id: roomCode });
           if (room) {
             logger.info("Room already exist");
             socket.to(socket.id).emit(SOCKET_EVENT_TYPE.MESSAGE, {
               type: SOCKET_EVENT_TYPE.ROOM_ALREADY_EXIST,
-              room: room_id,
+              room: roomCode,
             });
             return;
           }
-          socket.join(room_id);
+          socket.join(roomCode);
           socket.broadcast.emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.CREATE_ROOM,
-            room: room_id,
+            room: roomCode,
           });
           break;
         default:
