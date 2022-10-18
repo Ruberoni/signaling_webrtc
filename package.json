@@ -34,19 +34,19 @@
   "author": "Balakrishna Avulapati <bavulapati@gmail.com> (https://github.com/bavulapati)",
   "license": "MIT",
   "dependencies": {
-    "app-root-path": "^2.2.1",
+    "app-root-path": "^3.1.0",
     "express": "^4.18.2",
     "socket.io": "^4.5.2",
-    "winston": "^3.2.1"
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@types/app-root-path": "^1.2.4",
     "@types/express": "^4.17.14",
-    "@types/node": "^11.13.13",
-    "@types/socket.io": "^2.1.2",
+    "@types/node": "^18.11.0",
+    "@types/socket.io": "^3.0.1",
     "ts-node": "^10.9.1",
-    "tslint": "^5.17.0",
+    "tslint": "^5.20.1",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.5.1"
+    "typescript": "^4.8.4"
   }
 }
