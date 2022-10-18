@@ -32,7 +32,7 @@ class SocketListeners {
     });
 
     socket.on(SOCKET_EVENT_TYPE.MESSAGE, (event: any): void => {
-      logger.info(`Client said: ${JSON.stringify(event)}`);
+      // logger.info(`Client said: ${JSON.stringify(event)}`);
 
       if (typeof event !== "object") {
         console.warn("[socket.on][message] El mensaje no es un object");
@@ -65,7 +65,7 @@ class SocketListeners {
          * event.offer
          */
         case SOCKET_EVENT_TYPE.OFFER:
-          logProcedure(SOCKET_EVENT_TYPE.OFFER, { offer: event.offer });
+          logProcedure(SOCKET_EVENT_TYPE.OFFER);
           socket.broadcast.to(roomCode).emit(SOCKET_EVENT_TYPE.MESSAGE, {
             type: SOCKET_EVENT_TYPE.OFFER,
             offer: event.offer, // Remote description
