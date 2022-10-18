@@ -7,11 +7,10 @@
   "main": "dist/app.js",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "start:clean": "npm install && npm audit fix && npm test",
+    "start:prod": "node dist/app.js",
     "lint": "tslint --project tsconfig.json --config tslint.json --fix",
     "lint-added": "tslint --config tslint.json --fix",
-    "transpile": "tsc --build tsconfig.json",
-    "test": "npm run transpile && node dist/app.js"
+    "build": "tsc --build"
   },
   "husky": {
     "hooks": {
