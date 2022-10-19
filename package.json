@@ -6,7 +6,8 @@
   "bugs": "https://github.com/bavulapati/singalling_webrtc/issues",
   "main": "dist/app.js",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start:dev": "ts-node src/app.ts",
+    "start": "node dist/app.js",
     "start:prod": "node dist/app.js",
     "lint": "tslint --project tsconfig.json --config tslint.json --fix",
     "lint-added": "tslint --config tslint.json --fix",
